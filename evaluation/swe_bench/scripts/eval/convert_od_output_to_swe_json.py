@@ -15,9 +15,15 @@ model_name = os.path.basename(os.path.dirname(args.od_output_file))
 
 
 def convert_row_to_swebench_format(row):
+    patch = row['git_patch']
+    # clean up patch
+    if 'diff --git' in patch:
+        # set the patch to startswith 'diff --git'
+        patch = patch[patch.index('diff --git') :]
+
     return {
         'instance_id': row['instance_id'],
-        'model_patch': row['git_patch'],
+        'model_patch': patch,
         'model_name_or_path': model_name,
     }
 
